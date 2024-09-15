@@ -1,0 +1,7 @@
+import{_ as a,a as e,af as n,o as t}from"./chunks/framework.C87LdZyP.js";const h=JSON.parse('{"title":"Linux Mac Address","description":"","frontmatter":{"title":"Linux Mac Address","date":"2017-05-09T00:00:00.000Z","tags":["linux"],"category":["DevOps"]},"headers":[],"relativePath":"posts/2017/05/2017-05-09-show-mac-address.md","filePath":"posts/2017/05/2017-05-09-show-mac-address.md","lastUpdated":1718193786000}'),p={name:"posts/2017/05/2017-05-09-show-mac-address.md"};function i(c,s,l,o,d,r){return t(),e("div",null,s[0]||(s[0]=[n(`<p>Linux 上查看Mac地址：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark-dimmed vp-code" tabindex="0"><code><span class="line"><span>ifconfig &lt;Interface ex:eth0,eth1&gt; | grep -o -E &#39;([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}&#39;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># Also you can get MAC for all interface as follows</span></span>
+<span class="line"><span>cat /sys/class/net/*/address</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># For particular interface like for eth0</span></span>
+<span class="line"><span>cat /sys/class/net/eth0/address</span></span></code></pre></div><hr><div style="text-align:center;color:#00000099;font-size:14px;">END</div>`,4)]))}const g=a(p,[["render",i]]);export{h as __pageData,g as default};

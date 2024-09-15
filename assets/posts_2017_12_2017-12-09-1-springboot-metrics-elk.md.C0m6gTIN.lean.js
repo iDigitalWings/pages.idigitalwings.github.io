@@ -1,0 +1,71 @@
+import{_ as i,a,af as n,o as t}from"./chunks/framework.C87LdZyP.js";const o=JSON.parse('{"title":"Springboot Metrics to ELK","description":"","frontmatter":{"title":"Springboot Metrics to ELK","date":"2017-12-09T00:00:00.000Z","tags":["elk","springboot","metrics"]},"headers":[],"relativePath":"posts/2017/12/2017-12-09-1-springboot-metrics-elk.md","filePath":"posts/2017/12/2017-12-09-1-springboot-metrics-elk.md","lastUpdated":1718173059000}'),p={name:"posts/2017/12/2017-12-09-1-springboot-metrics-elk.md"};function l(e,s,h,k,r,d){return t(),a("div",null,s[0]||(s[0]=[n(`<p>logstash 配置如下：</p><div class="language-ruby vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">ruby</span><pre class="shiki shiki-themes github-light github-dark-dimmed vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">input {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">  http_poller {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    urls =&gt; {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">      pdo_wms25 =&gt; </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;http://wms-test:20010/metrics&quot;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">      # test3 =&gt; &quot;https://syndication.twitter.com/settings&quot;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    request_timeout =&gt; </span><span style="--shiki-light:#005CC5;--shiki-dark:#6CB6FF;">60</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">    # Supports &quot;cron&quot;, &quot;every&quot;, &quot;at&quot; and &quot;in&quot; schedules by rufus scheduler</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    schedule =&gt; { cron =&gt; </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;* * * * * UTC&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">    #codec =&gt; &quot;json&quot;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">    # A hash of request metadata info (timing, response headers, etc.) will be sent here</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    metadata_target =&gt; </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;http_poller_metadata&quot;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">filter {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">  de_dot {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    separator =&gt; </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;_&quot;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">  }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">output {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">	elasticsearch {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">		hosts =&gt; </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;elasticsearch:9200&quot;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">	}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">}</span></span></code></pre></div><p>这里使用 de_dot 来转换key中的点，不然发送的elasticsearch会报错。</p><p>使用 beat也可以达到相同的目的，</p><div class="language-yml vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">yml</span><pre class="shiki shiki-themes github-light github-dark-dimmed vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">######################## Httpbeat Configuration Example ########################</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">metricbeat.modules</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">- </span><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">module</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">system</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  metricsets</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    - </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">cpu</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    - </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">filesystem</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    - </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">memory</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    - </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">network</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    - </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">process</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  enabled</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#6CB6FF;">true</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  period</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">10s</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  processes</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&#39;.*&#39;</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">]</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  cpu_ticks</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#6CB6FF;">false</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">############################## Httpbeat ########################################</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">httpbeat</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  hosts</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">    # Each - Host endpoints to call. Below are the host endpoint specific configurations</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    -</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;@every 7s&quot;</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      url</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">http://wms-test:20010/health</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      method</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">get</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      headers</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">        Accept</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">application/json</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      output_format</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">json</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      json_dot_mode</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">replace</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">    -</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;@every 6s&quot;</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      url</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">http://wms-test:20010/metrics</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      method</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">get</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      headers</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">        Accept</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">application/json</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      output_format</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">json</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">      json_dot_mode</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">replace</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">#================================ General =====================================</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">fields</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  app_id</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">test_app</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#768390;">#----------------------------- Logstash output --------------------------------</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">output.elasticsearch</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#8DDB8C;">  hosts</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#96D0FF;">&quot;elasticsearch:9200&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#ADBAC7;">]</span></span></code></pre></div><hr><ul><li><p><a href="https://blog.mimacom.com/blog/2017/01/20/spring-microservices-monitoring-metrics-endpoint-and-elk/" target="_blank" rel="noreferrer">Spring microservices monitoring: /metrics endpoint and ELK</a></p></li><li><p><a href="https://blog.mimacom.com/blog/2017/06/29/spring-microservices-monitoring-metrics-endpoint-and-elk-part-ii-improvements/" target="_blank" rel="noreferrer">Spring microservices monitoring: /metrics endpoint and ELK, Part II: Improvements</a></p></li><li><p><a href="https://www.elastic.co/guide/en/logstash/master/plugins-filters-de_dot.html" target="_blank" rel="noreferrer">Dot Filter Plugin</a></p></li><li><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/2.0/breaking_20_mapping_changes.html#_field_names_may_not_contain_dots" target="_blank" rel="noreferrer">Mapping Changes</a></p></li><li><p><a href="http://knes1.github.io/blog/2015/2015-08-16-manage-spring-boot-logs-with-elasticsearch-kibana-and-logstash.html" target="_blank" rel="noreferrer">Manage Spring Boot Logs with Elasticsearch, Logstash and Kibana</a></p></li><li><p><a href="https://aboullaite.me/spring-boot-elastic-kibana/" target="_blank" rel="noreferrer">Spring Boot metrics monitoring using elasticsearch and kibana</a></p></li></ul>`,7)]))}const c=i(p,[["render",l]]);export{o as __pageData,c as default};
